@@ -102,13 +102,18 @@ def configFile = new File(ctx.artifactoryHome.etcDir, CONFIG_FILE_PATH)
 if ( deprecatedConfigFile.exists() ) {
 
     if ( !configFile.exists() ) {
-        def config = new ConfigSlurper().parse(deprecatedConfigFile.toURL())
+        def config = new ConfigSlurper().parse(deprecatedConfigFile.toURI().toURL())
         log.info "Schedule job policy list: $config.policies"
 
         def count=1
         config.policies.each{ policySettings ->
             def cron = policySettings[ 0 ] ? policySettings[ 0 ] as String : ["0 0 5 ? * 1"]
             def repos = policySettings[ 1 ] ? policySettings[ 1 ] as String[] : ["__none__"]
+
+            if (repos[0] == "__all__"){
+                repos = null
+            }
+
             def months = policySettings[ 2 ] ? policySettings[ 2 ] as int : 6
             def paceTimeMS = policySettings[ 3 ] ? policySettings[ 3 ] as int : 0
             def dryRun = policySettings[ 4 ] ? policySettings[ 4 ] as Boolean : false
@@ -129,7 +134,7 @@ if ( deprecatedConfigFile.exists() ) {
 
 if ( configFile.exists() ) {
   
-    def config = new JsonSlurper().parse(configFile.toURL())
+    def config = new JsonSlurper().parse(configFile.toURI().toURL())
     log.info "Schedule job policy list: $config.policies"
 
     def count=1
@@ -169,7 +174,7 @@ private def artifactCleanup(String timeUnit, int timeInterval, String[] repos, l
 
     calendarUntil.add(mapTimeUnitToCalendar(timeUnit), -timeInterval)
 
-    def calendarUntilFormatted = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(calendarUntil.getTime());
+    def calendarUntilFormatted = new SimpleDateFormat("yyyy/MM/dd HH:mm").format(calendarUntil.getTime())
     log.info "Removing all artifacts not downloaded since $calendarUntilFormatted"
 
     Global.stopCleaning = false

@@ -7,9 +7,10 @@ paths.
 Parameters
 ----------
 
-This plugin takes one parameter, called `paths`, which consists of a
-comma-separated list of paths to search for empty directories in. Each path is
-in the form `repository-name/path/to/dir`.
+This plugin takes two parameters, called 
+`paths`, which consists of a comma-separated list of paths to search for empty directories in (each path is
+in the form `repository-name/path/to/dir`, use keyword "__all__" to check all repositories) and
+`cron`, which is a string containing cron syntax schedule to run this plugin (Default *"0 0 5 ? * 1"*).
 
 Executing
 ---------

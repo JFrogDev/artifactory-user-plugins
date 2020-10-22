@@ -23,7 +23,7 @@ Parameters
 - `months`: **Deprecated**. Instead of `timeUnit` and `timeInterval` the `month` parameter is supported for backwards compatibility reasons. It defined the months to look back before deleting an artifact. Default *1*.
 - `timeUnit`: The unit of the time interval. *year*, *month*, *day*, *hour* or *minute* are allowed values. Default *month*.
 - `timeInterval`: The time interval to look back before deleting an artifact. Default *1*.
-- `repos`: A list of repositories to clean. This parameter is required.
+- `repos`: A list of repositories to clean. Use keyword "__all__" to cleanup all. Default *"__none__"*
 - `dryRun`: If this parameter is passed, artifacts will not actually be deleted. Default *false*.
 - `paceTimeMS`: The number of milliseconds to delay between delete operations. Default *0*.
 - `disablePropertiesSupport`: Disable the support of Artifactory Properties (see below *Artifactory Properties support* section). Default *false*.

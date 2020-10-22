@@ -46,17 +46,36 @@ executions {
     }
 }
 
-def config = new ConfigSlurper().parse(new File(ctx.artifactoryHome.etcDir, PROPERTIES_FILE_PATH).toURL())
+private def insertAllRepositories(ArrayList paths) {
+        repositories.getLocalRepositories().each {
+            paths.add(it)
+        }
+
+        repositories.getRemoteRepositories().each {
+            paths.add(it)
+        }
+
+        repositories.getVirtualRepositories().each {
+            paths.add(it)
+        }
+}
+
+def config = new ConfigSlurper().parse(new File(ctx.artifactoryHome.etcDir, PROPERTIES_FILE_PATH).toURI().toURL())
 log.info "Schedule job policy list: $config.policies"
 
 config.policies.each{ policySettings ->
     def cron = policySettings[ 0 ] ? policySettings[ 0 ] as String : ["0 0 5 ? * 1"]
     def paths = policySettings[ 1 ] ? policySettings[ 1 ] as String[] : ["__none__"]
 
+    if (paths[0] == "__all__") {
+        paths = []
+        insertAllRepositories(paths)
+    }
+
     jobs {
         "scheduledDeleteEmptyDirs_$cron"(cron: cron) {
             log.info "Policy settings for scheduled run at($cron): path list($paths)"
-            deleteEmptyDirectories( paths )
+            deleteEmptyDirectories( paths as String[])
         }
     }
 }
