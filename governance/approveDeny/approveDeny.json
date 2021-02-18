@@ -1,0 +1,4 @@
+{
+    "ipServer": "http://host.docker.internal:8888/validateIP",
+    "entitlementServer": "http://host.docker.internal:8888/validateEntitlements"
+}
