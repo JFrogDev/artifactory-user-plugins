@@ -22,13 +22,16 @@ import org.artifactory.repo.RepoPathFactory
 
 // usage: curl -X POST http://localhost:8088/artifactory/api/plugins/execute/cleanDockerImages
 
+def pluginGroup = 'cleaners'
 executions {
-    cleanDockerImages() { params ->
+    cleanDockerImages(groups: [pluginGroup]) { params ->
         def deleted = []
         def etcdir = ctx.artifactoryHome.etcDir
         def propsfile = new File(etcdir, "plugins/cleanDockerImages.properties")
-        def repos = new ConfigSlurper().parse(propsfile.toURL()).dockerRepos
+        //def repos = new ConfigSlurper().parse(propsfile.toURL()).dockerRepos
         def dryRun = params['dryRun'] ? params['dryRun'][0] as boolean : false
+        def repos = params['dockerRepos'] ? params['dockerRepos'] as String[] : new ConfigSlurper().parse(propsfile.toURL()).dockerRepos
+        log.debug("repo list: $repos")
         repos.each {
             log.debug("Cleaning Docker images in repo: $it")
             def del = buildParentRepoPaths(RepoPathFactory.create(it), dryRun)
