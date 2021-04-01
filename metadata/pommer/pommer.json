@@ -1,3 +1,5 @@
 {
-	"fileExtensions" : ["abc","xyz"]
+	"fileExtensions" : ["abc","xyz"],
+	"blacklist"      : ["maven-base:test"],
+	"whitelist"      : ["maven-base"]
 }
