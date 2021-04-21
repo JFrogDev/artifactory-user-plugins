@@ -52,7 +52,7 @@ executions {
     cleanup(groups: [pluginGroup]) { params ->
         def timeUnit = params['timeUnit'] ? params['timeUnit'][0] as String : DEFAULT_TIME_UNIT
         def timeInterval = params['timeInterval'] ? params['timeInterval'][0] as int : DEFAULT_TIME_INTERVAL
-        def repos = params['repos'] as String[]
+        def repos = params['repos'] ? params['repos'] as String[] : ["__none__"] as String[]
         def dryRun = params['dryRun'] ? new Boolean(params['dryRun'][0]) : false
         def disablePropertiesSupport = params['disablePropertiesSupport'] ? new Boolean(params['disablePropertiesSupport'][0]) : false
         def paceTimeMS = params['paceTimeMS'] ? params['paceTimeMS'][0] as int : 0
