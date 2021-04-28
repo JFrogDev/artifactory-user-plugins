@@ -51,7 +51,13 @@ storage {
   afterCreate { item ->
     def etcdir = ctx.artifactoryHome.etcDir
     def cfgfile = new File(etcdir, REMOTE_BACKUP)
-    def cfg = new JsonSlurper().parse(cfgfile)
+
+    // Ensure invalid or missing JSON config does not prevent Artifactory
+    // from serving and receiving artifacts.
+    //
+    cfg = parseJson(cfgfile)
+    if (!cfg) return
+
     if (item.repoKey in cfg && !item.isFolder()) {
       asSystem {
         def dest = cfg[item.repoKey]
@@ -66,10 +72,30 @@ storage {
   }
 }
 
+def parseJson(cfgfile) {
+  if (!cfgfile.exists()) {
+    log.warn("Config file missing. Please provide a config file at '$cfgfile'.")
+    return
+  }
+
+  try {
+    return new JsonSlurper().parse(cfgfile)
+  } catch (Exception e) {
+    log.warn("Invalid JSON config in '$cfgfile', error was: $e")
+    return  // verbose way of saying no config loaded
+  }
+}
+
 def runBackup(repos) {
   def etcdir = ctx.artifactoryHome.etcDir
   def cfgfile = new File(etcdir, REMOTE_BACKUP)
-  def cfg = new JsonSlurper().parse(cfgfile)
+
+  // Ensure invalid or missing JSON config does not prevent Artifactory
+  // from serving and receiving artifacts.
+  //
+  cfg = parseJson(cfgfile)
+  if (!cfg) return
+
   if (repos) {
     def cfgtmp = [:]
     for (repo in repos) {
