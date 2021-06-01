@@ -64,6 +64,30 @@ storage {
       }
     }
   }
+
+  afterPropertyCreate { item, name, values ->
+    def etcdir = ctx.artifactoryHome.etcDir
+    def cfgfile = new File(etcdir, REMOTE_BACKUP)
+
+    // Ensure invalid or missing JSON config does not prevent Artifactory
+    // from serving and receiving artifacts.
+    //
+    cfg = parseJson(cfgfile)
+    if (!cfg) return
+
+    if (item.repoKey in cfg && !item.isFolder() && name != "artifactory.internal.etag") {
+      asSystem {
+        def dest = cfg[item.repoKey]
+        try {
+          // Set property in archive repo
+          def destpath = RepoPathFactory.create(dest, item.relPath)
+          repositories.setProperty(destpath, name, values)
+        } catch (Exception ex) {
+          log.warn("Unable to set property $name for $destpath: $ex.message")
+        }
+      }
+    }
+  }
 }
 
 def runBackup(repos) {
