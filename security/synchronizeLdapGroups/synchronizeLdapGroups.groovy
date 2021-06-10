@@ -31,6 +31,9 @@ realms {
                 || username ==~ /^token:jf[a-z]+@01e[a-z0-9]{23}$/) {
                 return true
             }
+            if (user.realm == 'internal') {
+                return true
+            }
             def settings = new LdapGroupsSettings()
             // 'il-users' is an existing Ldap Group Setting Name in Artifactory
             // All the permissions given to the group will be inherited by the user
