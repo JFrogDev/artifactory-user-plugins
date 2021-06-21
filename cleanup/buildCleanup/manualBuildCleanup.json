@@ -1,0 +1,17 @@
+{
+    "policies": [
+        {
+            "softClean":[
+                "nuget-release-local",
+                "nuget-snapshot-local",
+                "Local_nuget_snapshot"
+            ],
+            "hardClean": [
+                "conan-release-local",
+                "conan-snapshot-local",
+                "pypi-snapshot-local",
+                "pypi-release-local"
+            ]
+        }
+    ]
+}
