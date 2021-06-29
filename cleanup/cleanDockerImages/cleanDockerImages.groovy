@@ -105,7 +105,7 @@ def simpleTraverse(parentInfo, oldSet, imagesPathMap, imagesCount) {
 // This method checks if the docker image's manifest has the property
 // "com.jfrog.artifactory.retention.maxDays" for purge
 def checkDaysPassedForDelete(item) {
-    def maxDaysProp = "docker.label.com.jfrog.artifactory.retention.maxDays"
+    def maxDaysProp = "docker.label.com.jfrog.artifactory.retention.maxdays"
     def oneday = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
     def prop = repositories.getProperty(item.repoPath, maxDaysProp)
     if (!prop) return false
@@ -118,7 +118,7 @@ def checkDaysPassedForDelete(item) {
 // This method checks if the docker image's manifest has the property
 // "com.jfrog.artifactory.retention.maxCount" for purge
 def getMaxCountForDelete(item) {
-    def maxCountProp = "docker.label.com.jfrog.artifactory.retention.maxCount"
+    def maxCountProp = "docker.label.com.jfrog.artifactory.retention.maxcount"
     def prop = repositories.getProperty(item.repoPath, maxCountProp)
     if (!prop) return 0
     log.debug "PROPERTY $maxCountProp FOUND = $prop IN MANIFEST FILE"

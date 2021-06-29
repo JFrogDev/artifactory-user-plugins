@@ -24,17 +24,17 @@ Usage
 Cleanup policies are specified as labels on the Docker image. Currently, this
 plugin supports the following policies:
 
-- `maxDays`: The maximum number of days a Docker image can exist in an
+- `maxdays`: The maximum number of days a Docker image can exist in an
   Artifactory repository. Any images older than this will be deleted.
-- `maxCount`: The maximum number of versions of a particular image which should
-  exist. For example, if there are 10 versions of a Docker image and `maxCount`
+- `maxcount`: The maximum number of versions of a particular image which should
+  exist. For example, if there are 10 versions of a Docker image and `maxcount`
   is set to 6, the oldest 4 versions of the image will be deleted.
 
 To set these labels for an image, add them to the Dockerfile before building:
 
 ``` dockerfile
-LABEL com.jfrog.artifactory.retention.maxCount="10"
-LABEL com.jfrog.artifactory.retention.maxDays="7"
+LABEL com.jfrog.artifactory.retention.maxcount="10"
+LABEL com.jfrog.artifactory.retention.maxdays="7"
 ```
 
 When a Docker image is deployed, Artifactory will automatically create
