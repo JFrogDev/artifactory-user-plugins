@@ -38,6 +38,8 @@ executions {
             repositories.delete it
             // now let's delete if some directories became empty
             deleteEmptyDirs it.parent
+            // uncomment next line to enable throttling when deleting artifacts to 1 deletion per 1000ms, change value to slow down further.
+            // sleep( 1000 )
         }
     }
 }
