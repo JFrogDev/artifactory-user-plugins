@@ -44,10 +44,7 @@ def buildParentRepoPaths(path, dryRun) {
     def deleted = [], oldSet = [], imagesPathMap = [:], imagesCount = [:]
     def parentInfo = repositories.getItemInfo(path)
     simpleTraverse(parentInfo, oldSet, imagesPathMap, imagesCount)
-    for (img in oldSet) {
-        deleted << img.id
-        if (!dryRun) repositories.delete(img)
-    }
+    deleted = oldSet
     for (key in imagesPathMap.keySet()) {
         def repoList = imagesPathMap[key]
         def maxImagesCount = imagesCount[key]
@@ -84,7 +81,8 @@ def simpleTraverse(parentInfo, oldSet, imagesPathMap, imagesCount) {
         // - aggregate the image info to group by image and sort by create
         //   date for maxCount policy
         if (checkDaysPassedForDelete(childItem)) {
-            log.debug("Adding to OLD MAP: $parentRepoPath")
+            log.debug("${dryRun? 'Would have deleted' : 'Deleting'}: $parentRepoPath")
+            if (!dryRun) repositories.delete(img)
             oldSet << parentRepoPath
         } else if ((maxCount = getMaxCountForDelete(childItem)) > 0) {
             log.debug("Adding to IMAGES MAP: $parentRepoPath")
