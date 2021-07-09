@@ -29,12 +29,15 @@ plugin supports the following policies:
 - `maxCount`: The maximum number of versions of a particular image which should
   exist. For example, if there are 10 versions of a Docker image and `maxCount`
   is set to 6, the oldest 4 versions of the image will be deleted.
+- `keepTags`: A commma-separated list of tags to not clean up regardless of the
+  other checks.  This is used to not clean up a rotating tag like "latest"
 
 To set these labels for an image, add them to the Dockerfile before building:
 
 ``` dockerfile
 LABEL com.jfrog.artifactory.retention.maxCount="10"
 LABEL com.jfrog.artifactory.retention.maxDays="7"
+LABEL com.jfrog.artifactory.retention.keepTags="latest,dev-latest"
 ```
 
 When a Docker image is deployed, Artifactory will automatically create
